@@ -1,0 +1,72 @@
+{
+  "title": "Sample IT Certification Exam",
+  "questions": [
+    {
+      "id": 1,
+      "type": "single",
+      "question": "What does API stand for?",
+      "options": [
+        "Application Programming Interface",
+        "Advanced Programming Integration",
+        "Application Process Integration",
+        "Advanced Process Interface"
+      ],
+      "correct": [0],
+      "explanation": "API stands for Application Programming Interface, which is a set of rules and protocols for building and interacting with software applications."
+    },
+    {
+      "id": 2,
+      "type": "multiple",
+      "question": "Which of the following are valid HTTP methods? (Select all that apply)",
+      "options": [
+        "GET",
+        "POST",
+        "FETCH",
+        "DELETE",
+        "RETRIEVE"
+      ],
+      "correct": [0, 1, 3],
+      "explanation": "GET, POST, and DELETE are standard HTTP methods. FETCH and RETRIEVE are not valid HTTP methods."
+    },
+    {
+      "id": 3,
+      "type": "single",
+      "question": "In React, what hook is used to manage component state?",
+      "options": [
+        "useEffect",
+        "useState",
+        "useContext",
+        "useReducer"
+      ],
+      "correct": [1],
+      "explanation": "useState is the primary hook for managing component state in React functional components."
+    },
+    {
+      "id": 4,
+      "type": "single",
+      "question": "What does CSS stand for?",
+      "options": [
+        "Computer Style Sheets",
+        "Cascading Style Sheets",
+        "Creative Style Sheets",
+        "Colorful Style Sheets"
+      ],
+      "correct": [1],
+      "explanation": "CSS stands for Cascading Style Sheets, which is used to describe the presentation of HTML documents."
+    },
+    {
+      "id": 5,
+      "type": "multiple",
+      "question": "Which of the following are JavaScript frameworks? (Select all that apply)",
+      "options": [
+        "React",
+        "Django",
+        "Vue.js",
+        "Angular",
+        "Laravel"
+      ],
+      "correct": [0, 2, 3],
+      "explanation": "React, Vue.js, and Angular are JavaScript frameworks. Django and Laravel are Python and PHP frameworks respectively."
+    }
+  ]
+}
