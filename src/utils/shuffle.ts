@@ -41,3 +41,13 @@ export function shuffleExamOptions(exam: Exam): Exam {
     questions: shuffledQuestions,
   };
 }
+
+/**
+ * Shuffles the order of questions in an exam
+ */
+export function shuffleQuestions(exam: Exam): Exam {
+  return {
+    ...exam,
+    questions: shuffleArray(exam.questions),
+  };
+}

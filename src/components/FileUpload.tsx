@@ -3,13 +3,14 @@ import { Exam } from '../types/exam';
 import { parseExamFile } from '../utils/parser';
 
 interface FileUploadProps {
-  onExamLoaded: (exam: Exam, shouldShuffle: boolean) => void;
+  onExamLoaded: (exam: Exam, shouldShuffleOptions: boolean, shouldShuffleQuestions: boolean) => void;
 }
 
 export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [shouldShuffle, setShouldShuffle] = useState(false);
+  const [shouldShuffleOptions, setShouldShuffleOptions] = useState(false);
+  const [shouldShuffleQuestions, setShouldShuffleQuestions] = useState(false);
   const [loadedExam, setLoadedExam] = useState<Exam | null>(null);
 
   const handleFile = (file: File) => {
@@ -35,7 +36,7 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
 
   const handleStart = () => {
     if (loadedExam) {
-      onExamLoaded(loadedExam, shouldShuffle);
+      onExamLoaded(loadedExam, shouldShuffleOptions, shouldShuffleQuestions);
     }
   };
 
@@ -123,12 +124,27 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
               </p>
             </div>
 
-            <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+            <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200 space-y-3">
               <label className="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={shouldShuffle}
-                  onChange={(e) => setShouldShuffle(e.target.checked)}
+                  checked={shouldShuffleQuestions}
+                  onChange={(e) => setShouldShuffleQuestions(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                />
+                <span className="ml-2 text-gray-700">
+                  Shuffle question order
+                </span>
+              </label>
+              <p className="text-xs text-gray-500 mt-1 ml-6">
+                Randomize the sequence of questions
+              </p>
+
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={shouldShuffleOptions}
+                  onChange={(e) => setShouldShuffleOptions(e.target.checked)}
                   className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                 />
                 <span className="ml-2 text-gray-700">
@@ -175,9 +191,15 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
                 </span>
               </div>
               <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-                <span className="text-gray-600">Shuffle:</span>
+                <span className="text-gray-600">Shuffle Questions:</span>
                 <span className="font-semibold text-gray-800">
-                  {shouldShuffle ? 'On' : 'Off'}
+                  {shouldShuffleQuestions ? 'On' : 'Off'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                <span className="text-gray-600">Shuffle Options:</span>
+                <span className="font-semibold text-gray-800">
+                  {shouldShuffleOptions ? 'On' : 'Off'}
                 </span>
               </div>
             </div>
@@ -279,14 +301,33 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
           </div>
         </div>
 
-        {/* Shuffle option */}
-        <div className="mt-6 glass-effect rounded-xl p-5 shadow-lg animate-scale-in" style={{ animationDelay: '0.2s' }}>
+        {/* Shuffle options */}
+        <div className="mt-6 glass-effect rounded-xl p-5 shadow-lg animate-scale-in space-y-4" style={{ animationDelay: '0.2s' }}>
           <label className="flex items-start cursor-pointer group">
             <div className="relative flex items-center justify-center mt-1">
               <input
                 type="checkbox"
-                checked={shouldShuffle}
-                onChange={(e) => setShouldShuffle(e.target.checked)}
+                checked={shouldShuffleQuestions}
+                onChange={(e) => setShouldShuffleQuestions(e.target.checked)}
+                className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 focus:ring-2 cursor-pointer"
+              />
+            </div>
+            <div className="ml-3 flex-1">
+              <span className="text-gray-800 font-semibold group-hover:text-purple-600 transition-colors">
+                Shuffle question order
+              </span>
+              <p className="text-xs text-gray-600 mt-1">
+                Randomize the sequence of questions (1, 2, 3, 4...)
+              </p>
+            </div>
+          </label>
+
+          <label className="flex items-start cursor-pointer group">
+            <div className="relative flex items-center justify-center mt-1">
+              <input
+                type="checkbox"
+                checked={shouldShuffleOptions}
+                onChange={(e) => setShouldShuffleOptions(e.target.checked)}
                 className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 focus:ring-2 cursor-pointer"
               />
             </div>
@@ -295,7 +336,7 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
                 Shuffle answer options
               </span>
               <p className="text-xs text-gray-600 mt-1">
-                Randomize the order of answer choices for each question
+                Randomize the order of answer choices (A, B, C, D...) for each question
               </p>
             </div>
           </label>
