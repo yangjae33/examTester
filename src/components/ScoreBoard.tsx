@@ -2,9 +2,10 @@ interface ScoreBoardProps {
   score: number;
   total: number;
   onRestart: () => void;
+  onLoadNewExam: () => void;
 }
 
-export const ScoreBoard = ({ score, total, onRestart }: ScoreBoardProps) => {
+export const ScoreBoard = ({ score, total, onRestart, onLoadNewExam }: ScoreBoardProps) => {
   const percentage = Math.round((score / total) * 100);
 
   const getGrade = () => {
@@ -45,7 +46,7 @@ export const ScoreBoard = ({ score, total, onRestart }: ScoreBoardProps) => {
               Try Again
             </button>
             <button
-              onClick={() => window.location.reload()}
+              onClick={onLoadNewExam}
               className="w-full px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300"
             >
               Load New Exam

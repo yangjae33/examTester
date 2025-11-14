@@ -10,6 +10,7 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [shouldShuffle, setShouldShuffle] = useState(false);
+  const [loadedExam, setLoadedExam] = useState<Exam | null>(null);
 
   const handleFile = (file: File) => {
     setError(null);
@@ -24,12 +25,18 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
       try {
         const content = e.target?.result as string;
         const exam = parseExamFile(content);
-        onExamLoaded(exam, shouldShuffle);
+        setLoadedExam(exam);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to parse file');
       }
     };
     reader.readAsText(file);
+  };
+
+  const handleStart = () => {
+    if (loadedExam) {
+      onExamLoaded(loadedExam, shouldShuffle);
+    }
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -65,69 +72,130 @@ export const FileUpload = ({ onExamLoaded }: FileUploadProps) => {
           VCE Player
         </h1>
 
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-            isDragging
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-300 bg-white'
-          }`}
-        >
-          <div className="mb-4">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
+        {!loadedExam ? (
+          <>
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
+                isDragging
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-300 bg-white'
+              }`}
             >
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+              <div className="mb-4">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <p className="text-gray-600 mb-4">
+                Drag and drop your exam file here, or
+              </p>
+
+              <label className="cursor-pointer">
+                <span className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 inline-block">
+                  Browse Files
+                </span>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleFileInput}
+                  className="hidden"
+                />
+              </label>
+
+              <p className="text-sm text-gray-500 mt-4">
+                Supports JSON format only
+              </p>
+            </div>
+
+            <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={shouldShuffle}
+                  onChange={(e) => setShouldShuffle(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                />
+                <span className="ml-2 text-gray-700">
+                  Shuffle answer options
+                </span>
+              </label>
+              <p className="text-xs text-gray-500 mt-1 ml-6">
+                Randomize the order of answer choices for each question
+              </p>
+            </div>
+          </>
+        ) : (
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                <svg
+                  className="w-8 h-8 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                Exam Loaded Successfully!
+              </h2>
+            </div>
+
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                <span className="text-gray-600">Title:</span>
+                <span className="font-semibold text-gray-800">{loadedExam.title}</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                <span className="text-gray-600">Questions:</span>
+                <span className="font-semibold text-gray-800">
+                  {loadedExam.questions.length}
+                </span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                <span className="text-gray-600">Shuffle:</span>
+                <span className="font-semibold text-gray-800">
+                  {shouldShuffle ? 'On' : 'Off'}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={handleStart}
+                className="w-full px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
+              >
+                Start Exam
+              </button>
+              <button
+                onClick={() => setLoadedExam(null)}
+                className="w-full px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+              >
+                Choose Different File
+              </button>
+            </div>
           </div>
-
-          <p className="text-gray-600 mb-4">
-            Drag and drop your exam file here, or
-          </p>
-
-          <label className="cursor-pointer">
-            <span className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 inline-block">
-              Browse Files
-            </span>
-            <input
-              type="file"
-              accept=".json"
-              onChange={handleFileInput}
-              className="hidden"
-            />
-          </label>
-
-          <p className="text-sm text-gray-500 mt-4">
-            Supports JSON format only
-          </p>
-        </div>
-
-        <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
-          <label className="flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={shouldShuffle}
-              onChange={(e) => setShouldShuffle(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-            />
-            <span className="ml-2 text-gray-700">
-              Shuffle answer options
-            </span>
-          </label>
-          <p className="text-xs text-gray-500 mt-1 ml-6">
-            Randomize the order of answer choices for each question
-          </p>
-        </div>
+        )}
 
         {error && (
           <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
