@@ -88,10 +88,16 @@ function App() {
   const score = answers.filter((a) => a.isCorrect).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
+    <div className="min-h-screen gradient-bg-soft py-8 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style={{ animationDelay: '1.5s' }}></div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 relative z-10">
+        <div className="mb-6 animate-fade-in">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
             {exam.title}
           </h1>
           <ProgressBar
