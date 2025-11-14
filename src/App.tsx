@@ -70,6 +70,14 @@ function App() {
     clearProgress();
   };
 
+  const handleLoadNewExam = () => {
+    setExam(null);
+    setCurrentQuestion(0);
+    setAnswers([]);
+    setIsComplete(false);
+    clearProgress();
+  };
+
   if (!exam) {
     return <FileUpload onExamLoaded={handleExamLoaded} />;
   }
@@ -81,6 +89,7 @@ function App() {
         score={score}
         total={exam.questions.length}
         onRestart={handleRestart}
+        onLoadNewExam={handleLoadNewExam}
       />
     );
   }
