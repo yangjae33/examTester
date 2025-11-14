@@ -68,8 +68,6 @@ export const ScoreBoard = ({ score, total, onRestart, onLoadNewExam }: ScoreBoar
             </button>
             <button
               onClick={onLoadNewExam}
-              className="w-full px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300"
-              onClick={() => window.location.reload()}
               className="w-full px-8 py-4 bg-white text-gray-700 rounded-xl font-bold text-lg shadow-md hover:shadow-lg hover:bg-gray-50 transform transition-all duration-200 border-2 border-gray-200 flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

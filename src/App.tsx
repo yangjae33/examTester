@@ -5,7 +5,7 @@ import { QuestionView } from './components/QuestionView';
 import { ProgressBar } from './components/ProgressBar';
 import { ScoreBoard } from './components/ScoreBoard';
 import { saveProgress, loadProgress, clearProgress } from './utils/storage';
-import { shuffleExamOptions } from './utils/shuffle';
+import { shuffleExamOptions, shuffleQuestions } from './utils/shuffle';
 
 function App() {
   const [exam, setExam] = useState<Exam | null>(null);
@@ -34,8 +34,19 @@ function App() {
     }
   }, [currentQuestion, answers, exam]);
 
-  const handleExamLoaded = (loadedExam: Exam, shouldShuffle: boolean) => {
-    const finalExam = shouldShuffle ? shuffleExamOptions(loadedExam) : loadedExam;
+  const handleExamLoaded = (loadedExam: Exam, shouldShuffleOptions: boolean, shouldShuffleQuestions: boolean) => {
+    let finalExam = loadedExam;
+
+    // Apply question shuffling first
+    if (shouldShuffleQuestions) {
+      finalExam = shuffleQuestions(finalExam);
+    }
+
+    // Then apply option shuffling
+    if (shouldShuffleOptions) {
+      finalExam = shuffleExamOptions(finalExam);
+    }
+
     setExam(finalExam);
     setCurrentQuestion(0);
     setAnswers([]);
