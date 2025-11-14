@@ -1,4 +1,4 @@
-import { Exam, Question } from '../types/exam';
+import { Exam } from '../types/exam';
 
 /**
  * Fisher-Yates shuffle algorithm
